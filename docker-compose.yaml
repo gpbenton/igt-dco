@@ -32,13 +32,17 @@ services:
 
   telegraf:
     container_name: telegraf
-    image: telegraf:1.14
+    image: telegraf:1.24.4
+    command: [ "--config-directory=/etc/telegraf/telegraf.d"]
     restart: always
     volumes:
       - ${PWD}/telegraf:/etc/telegraf:ro
       - /proc:/host/proc:ro
       - /var/run/docker.sock:/var/run/docker.sock
       - /etc/localtime:/etc/localtime:ro
+      # Add user telegraf to host and docker group first
+      - /etc/passwd:/etc/passwd:ro
+      - /etc/group:/etc/group:ro
     environment:
       HOST_PROC: "/host/proc"
     depends_on:
