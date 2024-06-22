@@ -16,23 +16,22 @@ services:
       - ./grafana:/var/lib/grafana
       - /etc/localtime:/etc/localtime:ro
     depends_on:
-      - influxdb
+      - influxdb2
 
-  influxdb:
-    container_name: influxdb
-    image: influxdb:1.8.3
+  influxdb2:
+    container_name: influxdb2
+    image: influxdb:2
     volumes:
-      - ./influxdb:/etc/influxdb:ro
-      - influxdbdata:/var/lib/influxdb
       - /etc/localtime:/etc/localtime:ro
+      - influxdb2:/var/lib/influxdb2
+      - influxdb2-config:/etc/influxdb2
     ports:
-      - "8086:8086"
-      - "8088:8088"
+      - 8086:8086
     restart: always
 
   telegraf:
     container_name: telegraf
-    image: telegraf:1.24.4
+    image: telegraf
     command: [ "--config-directory=/etc/telegraf/telegraf.d"]
     restart: always
     volumes:
@@ -45,10 +44,15 @@ services:
       - /etc/group:/etc/group:ro
     environment:
       HOST_PROC: "/host/proc"
+      INFLUXDB_URL: $INFLUXDB_URL
+      INFLUXDB_TOKEN: $INFLUXDB_TOKEN
+      HOSTNAME: $HOSTNAME
     depends_on:
-      - influxdb
+      - influxdb2
 
 volumes:
   influxdbdata:
     external: true
+  influxdb2:
+  influxdb2-config:
  
