@@ -34,14 +34,13 @@ services:
     image: telegraf
     command: [ "--config-directory=/etc/telegraf/telegraf.d"]
     restart: always
+    # 121 is the docker gid
+    user: telegraf:121
     volumes:
       - ${PWD}/telegraf:/etc/telegraf:ro
       - /proc:/host/proc:ro
       - /var/run/docker.sock:/var/run/docker.sock
       - /etc/localtime:/etc/localtime:ro
-      # Add user telegraf to host and docker group first
-      - /etc/passwd:/etc/passwd:ro
-      - /etc/group:/etc/group:ro
     environment:
       HOST_PROC: "/host/proc"
       INFLUXDB_URL: $INFLUXDB_URL
