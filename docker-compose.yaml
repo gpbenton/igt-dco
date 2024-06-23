@@ -45,7 +45,7 @@ services:
       HOST_PROC: "/host/proc"
       INFLUXDB_URL: $INFLUXDB_URL
       INFLUXDB_TOKEN: $INFLUXDB_TOKEN
-      HOSTNAME: $HOSTNAME
+      IDB_HOSTNAME: $IDB_HOSTNAME
     depends_on:
       - influxdb2
 
