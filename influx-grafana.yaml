@@ -29,8 +29,27 @@ spec:
         - containerPort: 8086
           hostPort: 8086
           protocol: TCP
+      volumeMounts:
+        - mountPath: /etc/localtime
+          name: time
+          readOnly: True
+        - mountPath: /var/lib/influxdb2
+          name: dbdata
+          readOnly: False
+        - mountPath:  /etc/influxdb2
+          name: dbconfig
+          readOnly: False
   volumes:
     - name: dbdata
       hostPath:
-        path: ./data2
+        path: ./influxdb-data
         type: DirectoryOrCreate
+    - name: dbconfig
+      hostPath:
+        path: ./influxdb-config
+        type: DirectoryOrCreate
+    - name: time
+      hostPath:
+        path: /etc/localtime
+        type: Directory
+
