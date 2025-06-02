@@ -1,4 +1,3 @@
-version: '3.4'
 services:
   grafana:
     container_name: grafana
@@ -17,6 +16,13 @@ services:
       - /etc/localtime:/etc/localtime:ro
     depends_on:
       - influxdb2
+    labels:
+      - homepage.group=Influxdb
+      - homepage.name=Grafana
+      - homepage.description=Graphical Charts
+      - homepage.showStats=true
+      - homepage.ping=$HOST_IP
+      - homepage.weight=100
 
   influxdb2:
     container_name: influxdb2
@@ -28,6 +34,13 @@ services:
     ports:
       - 8086:8086
     restart: always
+    labels:
+      - homepage.group=Influxdb
+      - homepage.name=Influxdb V2
+      - homepage.description=Time Series Database
+      - homepage.showStats=true
+      - homepage.ping=$HOST_IP
+      - homepage.weight=200
 
   telegraf:
     container_name: telegraf
@@ -48,6 +61,13 @@ services:
       IDB_HOSTNAME: $IDB_HOSTNAME
     depends_on:
       - influxdb2
+    labels:
+      - homepage.group=Influxdb
+      - homepage.name=Telegraf
+      - homepage.description=Data gathering
+      - homepage.showStats=true
+      - homepage.ping=$HOST_IP
+      - homepage.weight=300
 
 volumes:
   influxdbdata:
