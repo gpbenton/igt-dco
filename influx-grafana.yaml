@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: influx-grafana
+  labels:
+    app: influxdb
+
+spec:
+  containers:
+    - image: docker.io/grafana/grafana
+      name: grafana
+      env:
+      - name: GF_AUTH_DISABLE_LOGIN_FORM
+        value: "true"
+      - name: GF_AUTH_DISABLE_SIGNOUT_MENU
+        value: "true"
+      - name: GF_AUTH_ANONYMOUS_ENABLED
+        value: "true"
+      - name: GF_AUTH_ANONYMOUS_ORG_ROLE
+        value: "Admin"
+
+      ports:
+        - containerPort: 3000
+          hostPort: 3000
+          protocol: TCP
+    - name: influxdb
+      image: docker.io/library/influxdb:2
+      ports:
+        - containerPort: 8086
+          hostPort: 8086
+          protocol: TCP
+      volumeMounts:
+        - mountPath: /etc/localtime
+          name: time
+          readOnly: True
+        - mountPath: /var/lib/influxdb2
+          name: dbdata
+          readOnly: False
+        - mountPath:  /etc/influxdb2
+          name: dbconfig
+          readOnly: False
+  volumes:
+    - name: dbdata
+      hostPath:
+        path: ./influxdb-data
+        type: DirectoryOrCreate
+    - name: dbconfig
+      hostPath:
+        path: ./influxdb-config
+        type: DirectoryOrCreate
+    - name: time
+      hostPath:
+        path: /etc/localtime
+        type: Directory
+
