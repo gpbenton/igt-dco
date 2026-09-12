@@ -47,7 +47,7 @@ services:
 
   telegraf:
     container_name: telegraf
-    image: telegraf:1.39.3
+    image: telegraf:1.40.0
     command: [ "--config-directory=/etc/telegraf/telegraf.d"]
     restart: always
     # 121 is the docker gid
